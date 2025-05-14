@@ -21,8 +21,16 @@ class Sensor:
         pass
 
     # Takes a "measurement" of the world and outputs the result 
-    def update_status(): # You may decide how to implement the arguments for this function 
-        pass 
+    def update_status(self): # You may decide how to implement the arguments for this function 
+        measurement = input("Update sensor:\n 1. Update stoplight detection\n"+ 
+        "2. Update pedestrian detection\n 3. Update vehicle detection\n") 
+        if (measurement == '1'):
+            print("You selected to update the stoplight detection status...")
+        elif (measurement == '2'): 
+            print("You selected to update pedestrian detection status...") 
+        elif (measurement == '3'): 
+            print("You selected to update vehicle detection status...") 
+
 
 
 
@@ -37,9 +45,13 @@ def print_message(sensor):
 def main():
     print("\n***ENSF 692 Car Vision Detector Processing Program***\n")
     runFlag = True 
+    s = Sensor() 
     while runFlag:
-        sensorStatus = input("Update sensor:\n 1. Update stoplight detection\n 2. Update pedestrian detection\n 3. Update vehicle detection\n 4. Q to quit\n")
-        runFlag = (menuInput.lower() != 'q')
+        requestMeasurement = input("Continue measuring? y for yes | n for no")
+        if (requestMeasurement.lower() == 'n'):
+            runFlag = False 
+        else:
+            s.update_status()
 
 # Two ways I could see doing this: 
 # Either you should have Sensor request updates that the main command provides/ so like pretending that the main IS the sensor getting data 
