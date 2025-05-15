@@ -18,27 +18,50 @@ class Sensor:
     # Must include a constructor that uses default values
     # You do not need to provide commenting above the constructor
     def __init__(self):
-        pass
+        self.vehicle_status = 'no' 
+        self.pedestrian_status = 'no' 
+        self.stoplight_status = 'green' 
 
     # Takes a "measurement" of the world and outputs the result 
-    def update_status(self): # You may decide how to implement the arguments for this function 
-        measurement = input("Update sensor:\n 1. Update stoplight detection\n"+ 
-        "2. Update pedestrian detection\n 3. Update vehicle detection\n") 
-        if (measurement == '1'):
-            print("You selected to update the stoplight detection status...")
-        elif (measurement == '2'): 
-            print("You selected to update pedestrian detection status...") 
-        elif (measurement == '3'): 
-            print("You selected to update vehicle detection status...") 
-
-
+    def update_status(self,measurement): # You may decide how to implement the arguments for this function 
+            SDetect = input("What change has been indentified? ")
+            if (measurement == 1):
+                if(SDetect == "red"):
+                    self.stoplight_status = 'red'
+                elif (SDetect == 'yellow'):
+                    self.stoplight_status = 'yellow'
+                elif (SDetect == 'green'):
+                    self.stoplight_status = 'green'
+                else:
+                    print("Invalid vision change")
+            elif (measurement == 2): 
+                if(SDetect == "yes"):
+                    self.pedestrian_status = 'yes'
+                elif (SDetect == 'no'):
+                    self.pedestrian_status = 'no'
+                else:
+                    print("Invalid vision change")
+            elif (measurement == 3): 
+                if(SDetect == "yes"):
+                    self.vehicle_status = 'yes'
+                elif (SDetect == 'no'):
+                    self.vehicle_status = 'no'
+                else:
+                    print("Invalid vision change")
 
 
 # The sensor object should be passed to this function to print the action message and current status
 # Replace these comments with your function commenting
 def print_message(sensor):
-    pass
-
+    if (sensor.stoplight_status == 'red' or 
+        sensor.pedestrian_status == 'yes' or 
+        sensor.vehicle_status == 'yes'):
+        print("STOP")
+    elif (sensor.stoplight_status == 'yellow'):
+        print("Caution")
+    else:
+        print("Proceed")
+    print(f'Light: {sensor.stoplight_status} , Pedestrian: {sensor.pedestrian_status} , Vehicle: {sensor.vehicle_status}') 
 
 
 # Complete the main function below
@@ -47,24 +70,21 @@ def main():
     runFlag = True 
     s = Sensor() 
     while runFlag:
-        requestMeasurement = input("Continue measuring? y for yes | n for no")
-        if (requestMeasurement.lower() == 'n'):
-            runFlag = False 
-        else:
-            s.update_status()
-
-# Two ways I could see doing this: 
-# Either you should have Sensor request updates that the main command provides/ so like pretending that the main IS the sensor getting data 
-# Or you have the main command request updates from the sensor/ pretending that you are requesting data FROM the sensor 
-# Basically this is the difference between a publisher, or master/slave communication style 
-
-# I think I want to do this by having all the sensor logic in the sensor so: 
-# So basically sensor.update will "measure" the state of the world 
-# But then have a separate logic that says what to do with the updated status 
-# This way the sensor just measures things but the main function "brain" decides what to do with those things 
-
-
-
+        print('')
+        print("Are changes detected in the vision input?")
+        measurement = input("Select 1 for light, 2 for pedestrian, 3 for vehicle, or 0 to end the program: ")
+        try:
+            measurement = int(measurement)
+            if (measurement == 0):
+                runFlag = False 
+                break
+            elif (measurement == 1 or measurement == 2 or measurement == 3):
+                s.update_status(measurement)
+            else: 
+                raise ValueError 
+            print_message(s)
+        except ValueError:
+            print("You must select either 1, 2, 3 or 0.")
 
 
 # Conventional Python code for running main within a larger program
