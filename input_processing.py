@@ -22,12 +22,17 @@ class Sensor:
         self.pedestrian_status = 'no' 
         self.stoplight_status = 'green' 
 
-    # Takes a "measurement" of the world and outputs the result 
-    def update_status(self,measurement): # You may decide how to implement the arguments for this function 
-            SDetect = input("What change has been indentified? ")
-            if (measurement == 1):
+    # Takes a "measurement" of the world and updates the sensor's instance variables, if incorrect input is detected 
+    # the user is notified of an invalid vision change, no status changes, and the main loop is repeated. 
+    # Parameters: 
+    # Self so the method can reference the instance object 
+    # Measurement so it knows which part of the sensor to update, measurement has been preprocessed by main so
+    # we can safely assume it is an int of value 1, 2, or 3. 
+    def update_status(self,measurement): #
+            SDetect = input("What change has been indentified? ") # Determine what the status update is 
+            if (measurement == 1): # Checking stop light statuses, if input is not a valid option, print out 'Invalid vison change.' 
                 if(SDetect == "red"):
-                    self.stoplight_status = 'red'
+                    self.stoplight_status = 'red' # self allows the function to reference its own instance variables 
                 elif (SDetect == 'yellow'):
                     self.stoplight_status = 'yellow'
                 elif (SDetect == 'green'):
@@ -35,13 +40,13 @@ class Sensor:
                 else:
                     print("Invalid vision change")
             elif (measurement == 2): 
-                if(SDetect == "yes"):
+                if(SDetect == "yes"): # Checking pedestrian statuses, if input is not a valid option, print out 'Invalid vison change.' 
                     self.pedestrian_status = 'yes'
                 elif (SDetect == 'no'):
                     self.pedestrian_status = 'no'
                 else:
                     print("Invalid vision change")
-            elif (measurement == 3): 
+            elif (measurement == 3): # Checking vehicle statuses, if input is not a valid option, print out 'Invalid vison change.' 
                 if(SDetect == "yes"):
                     self.vehicle_status = 'yes'
                 elif (SDetect == 'no'):
@@ -50,38 +55,38 @@ class Sensor:
                     print("Invalid vision change")
 
 
-# The sensor object should be passed to this function to print the action message and current status
-# Replace these comments with your function commenting
+# Prints the appropriate action command and the current status of all the sensor elements. 
 def print_message(sensor):
     if (sensor.stoplight_status == 'red' or 
         sensor.pedestrian_status == 'yes' or 
-        sensor.vehicle_status == 'yes'):
+        sensor.vehicle_status == 'yes'): # Checks for all conditions that produce a STOP command, if any of these are true, STOP is printed 
         print("STOP")
-    elif (sensor.stoplight_status == 'yellow'):
+    elif (sensor.stoplight_status == 'yellow'): # Checks for any conditions that produces a Caution command, this is only 1 condition since all the STOP conditions are checked first 
         print("Caution")
-    else:
+    else: # Only if not STOP or Caution will proceed be printed 
         print("Proceed")
+    #No matter what print the status 
     print(f'Light: {sensor.stoplight_status} , Pedestrian: {sensor.pedestrian_status} , Vehicle: {sensor.vehicle_status}') 
 
 
-# Complete the main function below
+# Holds the main flow of the program and keeps the loop running as long as the user does not enter 0 
 def main():
     print("\n***ENSF 692 Car Vision Detector Processing Program***\n")
     runFlag = True 
-    s = Sensor() 
-    while runFlag:
+    s = Sensor() # Instantiate a Sensor object and assign a reference to that object in 's' 
+    while runFlag: 
         print('')
         print("Are changes detected in the vision input?")
-        measurement = input("Select 1 for light, 2 for pedestrian, 3 for vehicle, or 0 to end the program: ")
+        measurement = input("Select 1 for light, 2 for pedestrian, 3 for vehicle, or 0 to end the program: ") # First input from the user, should be a integer but if not an exception is thrown and handled 
         try:
-            measurement = int(measurement)
+            measurement = int(measurement) # Check if the user input is an int, ValueError exception thrown if not 
             if (measurement == 0):
                 runFlag = False 
-                break
-            elif (measurement == 1 or measurement == 2 or measurement == 3):
+                break # Break out of while loop to stop execution immediately if user wants to quit 
+            elif (measurement == 1 or measurement == 2 or measurement == 3): # At this point we can safely assume measurement is a number but this if statement guagrantees update_status only runs if the value is 1,2,or3 
                 s.update_status(measurement)
             else: 
-                raise ValueError 
+                raise ValueError # Raises if the input value is a number but isn't 0,1,2,or3
             print_message(s)
         except ValueError:
             print("You must select either 1, 2, 3 or 0.")
