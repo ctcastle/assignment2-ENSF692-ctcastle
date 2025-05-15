@@ -49,6 +49,6 @@ Your application must meet the following design specifications:
 * Tip: If you want to learn more about a specific aspect of a Python object, remember to take a look at the official documentation!
 
 # Code execution images - Copied input exactly to demonstrate proper output 
-![Execution image 1](https://github.com/ctcastle/assignment2-ENSF692-ctcastle/blob/main/ProgramExecution_1.png)  
+![Execution image 1](ProgramExecution_1.png)  
 
 ![Execution image 2](ProgramExecution_2.png) 
